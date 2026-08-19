@@ -1704,3 +1704,92 @@ body {
             translateX(50px);
     }
 }
+
+/* ========================================
+   LINE-BY-LINE PAGE REVEAL
+======================================== */
+
+.reveal-item {
+    opacity: 0;
+
+    transform: translateY(28px);
+
+    animation:
+        revealLine
+        500ms
+        cubic-bezier(0.65, 0, 0.35, 1)
+        forwards;
+}
+
+
+/* ========================================
+   BOOKING / HOME LABEL
+======================================== */
+
+.hero-label.reveal-item,
+.booking-label.reveal-item {
+    animation-delay: 100ms;
+}
+
+
+/* ========================================
+   HOME TITLE
+======================================== */
+
+.hero-title .reveal-item:nth-child(1) {
+    animation-delay: 180ms;
+}
+
+.hero-title .reveal-item:nth-child(2) {
+    animation-delay: 260ms;
+}
+
+.hero-title .reveal-item:nth-child(3) {
+    animation-delay: 340ms;
+}
+
+.hero-title .reveal-item:nth-child(4) {
+    animation-delay: 420ms;
+}
+
+
+/* ========================================
+   BOOKING TITLE
+======================================== */
+
+.booking-title .reveal-item:nth-child(1) {
+    animation-delay: 180ms;
+}
+
+.booking-title .reveal-item:nth-child(2) {
+    animation-delay: 280ms;
+}
+
+
+/* ========================================
+   DESCRIPTIONS
+======================================== */
+
+.hero-description.reveal-item,
+.booking-description.reveal-item {
+    animation-delay: 520ms;
+}
+
+
+/* ========================================
+   ANIMATION
+======================================== */
+
+@keyframes revealLine {
+
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
