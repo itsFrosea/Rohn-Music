@@ -1,0 +1,1706 @@
+/* ========================================
+   RESET
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* ========================================
+   HEADER
+======================================== */
+
+.header {
+    width: 100%;
+    height: 70px;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+
+    padding: 0 35px;
+
+    background: #000;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 1000;
+}
+
+
+/* ========================================
+   NAVIGATION - LEFT
+======================================== */
+
+.navigation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 38px;
+}
+
+.navigation a {
+    color: #999;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 400;
+
+    white-space: nowrap;
+
+    transition: color 0.25s ease;
+}
+
+.navigation a:hover {
+    color: #fff;
+}
+
+
+/* ========================================
+   LOGO - CENTER
+======================================== */
+
+.logo {
+    justify-self: center;
+
+    color: #ddd;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    letter-spacing: 8px;
+
+    white-space: nowrap;
+}
+
+
+/* ========================================
+   HEADER RIGHT
+======================================== */
+
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 28px;
+}
+
+
+/* ========================================
+   SOCIALS
+======================================== */
+
+.socials {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+}
+
+.socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    color: #aaa;
+
+    text-decoration: none;
+
+    font-size: 20px;
+
+    transition:
+        color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.socials a:hover {
+    color: #fff;
+
+    transform: translateY(-2px);
+}
+
+
+/* ========================================
+   ACCOUNT LINKS
+======================================== */
+
+.account-links {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.account-links a {
+    color: #fff;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    white-space: nowrap;
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+.account-links a:hover {
+    opacity: 0.65;
+}
+
+
+/* REGISTER */
+
+.account-links .register-link {
+    padding: 10px 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.account-links .register-link:hover {
+    opacity: 1;
+
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   HERO
+======================================== */
+
+.hero {
+    position: relative;
+
+    width: 100%;
+    height: calc(100vh - 70px);
+
+    min-height: 650px;
+
+    overflow: hidden;
+
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(3, 6, 10, 0.15) 0%,
+            rgba(3, 6, 10, 0.05) 45%,
+            rgba(0, 0, 0, 0) 75%
+        ),
+        url("assets/hero.jpg");
+
+    background-size: cover;
+    background-position: center center;
+
+    display: flex;
+    align-items: center;
+}
+
+
+/* ========================================
+   HERO CONTENT
+======================================== */
+
+.hero-content {
+    width: 50%;
+
+    padding-left: 8%;
+
+    margin-top: -20px;
+}
+
+
+/* Small label */
+
+.hero-label {
+    margin-bottom: 22px;
+
+    color: #aaa;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    letter-spacing: 5px;
+}
+
+
+/* Main heading */
+
+.hero h1 {
+    margin: 0;
+
+    color: #fff;
+
+    font-size: clamp(48px, 6vw, 92px);
+
+    font-weight: 700;
+
+    line-height: 0.94;
+
+    letter-spacing: -2px;
+}
+
+
+/* Description */
+
+.hero-description {
+    max-width: 390px;
+
+    margin-top: 28px;
+
+    color: #aaa;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+.hero-buttons {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    margin-top: 32px;
+}
+
+.btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    height: 48px;
+
+    padding: 0 24px;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    transition: all 0.3s ease;
+}
+
+
+/* Primary */
+
+.btn-primary {
+    background: #fff;
+
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: #ddd;
+}
+
+
+/* Secondary */
+
+.btn-secondary {
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    color: #fff;
+
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary:hover {
+    border-color: #fff;
+
+    background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ========================================
+   NEXT SHOW
+======================================== */
+
+.next-show {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    margin-top: 55px;
+
+    padding-left: 15px;
+
+    border-left: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.next-show-label {
+    color: #777;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+}
+
+.next-show-info {
+    color: #ddd;
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* ========================================
+   OTHER SECTIONS
+======================================== */
+
+#about,
+#shows,
+#booking {
+    min-height: 500px;
+
+    background: #000;
+}
+
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 900px) {
+
+    .header {
+        padding: 0 20px;
+    }
+
+    .navigation {
+        gap: 22px;
+    }
+
+    .socials {
+        gap: 14px;
+    }
+
+    .hero-content {
+        width: 60%;
+
+        padding-left: 6%;
+    }
+
+    .hero h1 {
+        font-size: 60px;
+    }
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 650px) {
+
+    .header {
+        height: 60px;
+
+        padding: 0 16px;
+    }
+
+    .navigation {
+        gap: 15px;
+    }
+
+    .navigation a {
+        font-size: 10px;
+    }
+
+    .logo {
+        font-size: 13px;
+        letter-spacing: 4px;
+    }
+
+    .socials {
+        display: none;
+    }
+
+
+    /* Hero */
+
+    .hero {
+        height: calc(100vh - 60px);
+
+        min-height: 600px;
+
+        background-position: 62% center;
+
+        align-items: flex-end;
+    }
+
+    .hero-content {
+        width: 100%;
+
+        padding: 0 25px 55px;
+
+        margin: 0;
+    }
+
+    .hero-label {
+        font-size: 10px;
+
+        letter-spacing: 3px;
+
+        margin-bottom: 16px;
+    }
+
+    .hero h1 {
+        font-size: 48px;
+
+        letter-spacing: -1px;
+    }
+
+    .hero-description {
+        font-size: 13px;
+
+        max-width: 300px;
+
+        margin-top: 20px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+
+        margin-top: 25px;
+    }
+
+    .btn {
+        height: 44px;
+
+        padding: 0 20px;
+    }
+
+    .next-show {
+        margin-top: 30px;
+    }
+}
+
+/* ========================================
+   BOOKING PAGE
+======================================== */
+
+.booking-page {
+    width: 100%;
+
+    background: #000;
+}
+
+/* ========================================
+   BOOKING HERO
+======================================== */
+
+.booking-hero {
+    position: relative;
+
+    width: 100%;
+
+    height: 58vh;
+    min-height: 480px;
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(3, 6, 10, 0.72) 0%,
+            rgba(3, 6, 10, 0.58) 35%,
+            rgba(0, 0, 0, 0.40) 65%,
+            rgba(0, 0, 0, 0.70) 100%
+        ),
+        url("assets/booking.png");
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+/* ========================================
+   BOOKING HERO CONTENT
+======================================== */
+
+.booking-hero-content {
+    width: 50%;
+
+    padding-left: 8%;
+
+    margin-top: -20px;
+}
+
+/* ========================================
+   BOOKING INTRO
+======================================== */
+
+.booking-intro {
+    max-width: 900px;
+
+    margin-bottom: 90px;
+}
+
+.booking-label {
+    margin-bottom: 20px;
+
+    color: #777;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 4px;
+}
+
+.booking-intro h1 {
+    color: #fff;
+
+    font-size: clamp(42px, 6vw, 82px);
+
+    font-weight: 600;
+
+    line-height: 0.95;
+
+    letter-spacing: -2px;
+}
+
+.booking-description {
+    max-width: 500px;
+
+    margin-top: 30px;
+
+    color: #888;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+
+/* ========================================
+   FORM
+======================================== */
+
+.booking-section {
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding: 65px 8% 120px;
+
+    background: #000;
+}
+
+.booking-form {
+    width: 100%;
+}
+
+
+/* ========================================
+   FORM SECTIONS
+======================================== */
+
+.form-section {
+    padding: 35px 0;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-section h2 {
+    margin-bottom: 35px;
+
+    color: #fff;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+}
+
+
+/* ========================================
+   FORM GRID
+======================================== */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 30px;
+}
+
+
+/* ========================================
+   FORM GROUP
+======================================== */
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.form-group label {
+    color: #777;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+
+/* ========================================
+   INPUTS
+======================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+    width: 100%;
+
+    padding: 15px 0;
+
+    border: none;
+
+    border-bottom: 1px solid #333;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    border-radius: 0;
+
+    transition:
+        border-color 0.25s ease;
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-bottom-color: #fff;
+}
+
+
+/* Placeholder */
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #555;
+}
+
+
+/* Select */
+
+.form-group select {
+    appearance: none;
+
+    cursor: pointer;
+}
+
+.form-group select option {
+    background: #111;
+
+    color: #fff;
+}
+
+
+/* Textarea */
+
+.form-group textarea {
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+
+/* ========================================
+   SUBMIT
+======================================== */
+
+.form-submit {
+    padding-top: 50px;
+}
+
+.booking-button {
+    min-width: 230px;
+
+    height: 52px;
+
+    padding: 0 28px;
+
+    border: none;
+
+    background: #fff;
+
+    color: #000;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.booking-button:hover {
+    background: #ddd;
+
+    transform: translateY(-2px);
+}
+
+
+/* ========================================
+   MOBILE BOOKING
+======================================== */
+
+@media (max-width: 700px) {
+
+    .booking-hero {
+        height: calc(100vh - 60px);
+
+        min-height: 600px;
+
+        background-position: center center;
+
+        align-items: flex-end;
+    }
+
+    .booking-hero-content {
+        width: 100%;
+
+        padding: 0 25px 55px;
+
+        margin: 0;
+    }
+
+    .booking-hero-content h1 {
+        font-size: 45px;
+
+        letter-spacing: -1px;
+    }
+
+    .booking-description {
+        font-size: 13px;
+    }
+
+    .booking-section {
+        padding: 70px 25px 90px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+    }
+
+    .form-section {
+        padding: 35px 0;
+    }
+
+    .booking-button {
+        width: 100%;
+    }
+}
+/* ========================================
+   AUTH PAGE
+======================================== */
+
+.auth-page {
+    min-height: calc(100vh - 70px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 80px 25px;
+
+    background: #000;
+}
+
+
+/* ========================================
+   AUTH CONTAINER
+======================================== */
+
+.auth-container {
+    width: 100%;
+    max-width: 480px;
+}
+
+
+/* ========================================
+   AUTH HEADER
+======================================== */
+
+.auth-label {
+    margin-bottom: 20px;
+
+    color: #777;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: 5px;
+}
+
+
+.auth-container h1 {
+    color: #fff;
+
+    font-size: clamp(45px, 7vw, 72px);
+    font-weight: 600;
+
+    line-height: 0.95;
+
+    letter-spacing: -2px;
+}
+
+
+.auth-description {
+    max-width: 420px;
+
+    margin-top: 25px;
+    margin-bottom: 55px;
+
+    color: #777;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* ========================================
+   AUTH FORM
+======================================== */
+
+.auth-container form {
+    width: 100%;
+}
+
+
+.auth-container .form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 30px;
+}
+
+
+/* ========================================
+   LABELS
+======================================== */
+
+.auth-container .form-group label {
+    color: #777;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    letter-spacing: 2px;
+}
+
+
+/* ========================================
+   INPUTS
+======================================== */
+
+.auth-container .form-group input {
+
+    width: 100%;
+
+    padding: 14px 0;
+
+    border: none;
+
+    border-bottom: 1px solid #333;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    border-radius: 0;
+
+    transition: border-color 0.25s ease;
+}
+
+
+.auth-container .form-group input:focus {
+    border-bottom-color: #fff;
+}
+
+
+.auth-container .form-group input::placeholder {
+    color: #555;
+}
+
+
+/* ========================================
+   MESSAGE
+======================================== */
+
+.auth-message {
+    min-height: 20px;
+
+    margin: 5px 0 15px;
+
+    color: #aaa;
+
+    font-size: 12px;
+}
+
+
+/* ========================================
+   CREATE ACCOUNT BUTTON
+======================================== */
+
+.auth-container .booking-button {
+    width: 100%;
+
+    height: 52px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    background: #fff;
+
+    color: #000;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.auth-container .booking-button:hover {
+    background: #ddd;
+
+    transform: translateY(-2px);
+}
+
+
+/* ========================================
+   LOGIN LINK
+======================================== */
+
+.auth-switch {
+    margin-top: 25px;
+
+    color: #666;
+
+    font-size: 12px;
+}
+
+
+.auth-switch a {
+    margin-left: 5px;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    border-bottom: 1px solid #555;
+
+    transition: border-color 0.25s ease;
+}
+
+
+.auth-switch a:hover {
+    border-color: #fff;
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 650px) {
+
+    .auth-page {
+        min-height: calc(100vh - 60px);
+
+        padding: 60px 25px 80px;
+
+        align-items: flex-start;
+    }
+
+    .auth-container h1 {
+        font-size: 50px;
+    }
+
+    .auth-description {
+        margin-bottom: 45px;
+    }
+
+}
+
+/* ========================================
+   ACCOUNT MENU
+======================================== */
+
+.account-menu {
+    position: relative;
+}
+
+
+.account-button {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.account-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* ========================================
+   DROPDOWN
+======================================== */
+
+.account-dropdown {
+    position: absolute;
+
+    top: calc(100% + 14px);
+
+    right: 0;
+
+    width: 190px;
+
+    padding: 15px;
+
+    background: #0b0b0b;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateY(-8px);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+
+    z-index: 200;
+}
+
+
+.account-dropdown.show {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0);
+}
+
+
+/* Account name */
+
+.account-name {
+    padding: 5px 8px 12px;
+
+    color: #fff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* Divider */
+
+.account-divider {
+    height: 1px;
+
+    margin: 3px 0 8px;
+
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+/* Dropdown links */
+
+.account-dropdown a,
+.account-dropdown button {
+    display: block;
+
+    width: 100%;
+
+    padding: 10px 8px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #999;
+
+    text-align: left;
+
+    text-decoration: none;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.account-dropdown a:hover,
+.account-dropdown button:hover {
+    color: #fff;
+
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   MY BOOKINGS
+======================================== */
+
+.my-bookings-page {
+    min-height: calc(100vh - 70px);
+
+    padding: 100px 8% 120px;
+
+    background: #000;
+}
+
+
+.my-bookings-intro {
+    max-width: 900px;
+
+    margin-bottom: 80px;
+}
+
+
+.my-bookings-intro h1 {
+    color: #fff;
+
+    font-size: clamp(48px, 7vw, 90px);
+
+    font-weight: 600;
+
+    line-height: 0.9;
+
+    letter-spacing: -3px;
+}
+
+
+.bookings-list-section {
+    width: 100%;
+
+    max-width: 1000px;
+}
+
+
+.bookings-list {
+    width: 100%;
+}
+
+
+/* ========================================
+   EMPTY / LOADING
+======================================== */
+
+.bookings-loading,
+.bookings-empty {
+    padding: 50px 0;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    color: #777;
+
+    font-size: 14px;
+}
+
+
+.bookings-empty a {
+    display: inline-block;
+
+    margin-top: 25px;
+
+    padding: 14px 22px;
+
+    background: #fff;
+
+    color: #000;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* ========================================
+   BOOKING CARD
+======================================== */
+
+.booking-card {
+
+    padding: 35px 0;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+
+.booking-card-top {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+
+.booking-card-label {
+
+    margin-bottom: 12px;
+
+    color: #777;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+.booking-card h2 {
+
+    color: #fff;
+
+    font-size: 30px;
+
+    font-weight: 500;
+
+    letter-spacing: -1px;
+}
+
+
+/* ========================================
+   STATUS
+======================================== */
+
+.booking-status {
+
+    padding: 8px 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    color: #aaa;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+}
+
+
+.booking-status-approved {
+    color: #fff;
+
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+
+.booking-status-declined {
+    color: #777;
+
+    border-color: #333;
+}
+
+
+.booking-status-cancelled {
+    color: #777;
+
+    border-color: #333;
+}
+
+
+/* ========================================
+   DETAILS
+======================================== */
+
+.booking-card-details {
+
+    display: flex;
+
+    gap: 70px;
+
+    margin-top: 35px;
+}
+
+
+.booking-card-details span,
+.booking-card-message span {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #555;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+}
+
+
+.booking-card-details p,
+.booking-card-message p {
+
+    color: #aaa;
+
+    font-size: 13px;
+}
+
+
+.booking-card-message {
+
+    margin-top: 30px;
+
+    max-width: 600px;
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 650px) {
+
+    .my-bookings-page {
+
+        padding: 70px 25px 90px;
+    }
+
+
+    .my-bookings-intro h1 {
+
+        font-size: 55px;
+    }
+
+
+    .booking-card-top {
+
+        flex-direction: column;
+    }
+
+
+    .booking-card-details {
+
+        flex-direction: column;
+
+        gap: 20px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .booking-page {
+        padding: 70px 25px 90px;
+
+        background-position: center center;
+    }
+
+}
+
+/* ========================================
+   SINGLE PAGE TRANSITION
+======================================== */
+
+#page-container {
+
+    position: relative;
+
+    width: 100%;
+
+    will-change:
+        transform,
+        opacity;
+
+}
+
+
+/* ========================================
+   LEAVE
+======================================== */
+
+#page-container.page-leave-left {
+
+    animation:
+        pageLeaveLeft
+        350ms
+        cubic-bezier(
+            0.65,
+            0,
+            0.35,
+            1
+        )
+        forwards;
+}
+
+
+#page-container.page-leave-right {
+
+    animation:
+        pageLeaveRight
+        350ms
+        cubic-bezier(
+            0.65,
+            0,
+            0.35,
+            1
+        )
+        forwards;
+}
+
+
+/* ========================================
+   LEAVE
+======================================== */
+
+#page-container.page-leave-left {
+
+    animation:
+        pageLeaveLeft
+        400ms
+        cubic-bezier(
+            0.65,
+            0,
+            0.35,
+            1
+        )
+        forwards;
+}
+
+
+#page-container.page-leave-right {
+
+    animation:
+        pageLeaveRight
+        400ms
+        cubic-bezier(
+            0.65,
+            0,
+            0.35,
+            1
+        )
+        forwards;
+}
+
+
+/* ========================================
+   ENTER
+======================================== */
+
+#page-container.page-enter-left {
+
+    opacity: 0;
+
+    transform:
+        translateX(-50px);
+}
+
+
+#page-container.page-enter-right {
+
+    opacity: 0;
+
+    transform:
+        translateX(50px);
+}
+
+
+#page-container.page-enter-active {
+
+    opacity: 1;
+
+    transform:
+        translateX(0);
+
+    transition:
+        transform 400ms
+            cubic-bezier(
+                0.65,
+                0,
+                0.35,
+                1
+            ),
+        opacity 400ms
+            cubic-bezier(
+                0.65,
+                0,
+                0.35,
+                1
+            );
+}
+
+/* ========================================
+   KEYFRAMES
+======================================== */
+
+@keyframes pageLeaveLeft {
+
+    from {
+
+        opacity: 1;
+
+        transform:
+            translateX(0);
+    }
+
+    to {
+
+        opacity: 0;
+
+        transform:
+            translateX(-50px);
+    }
+}
+
+
+@keyframes pageLeaveRight {
+
+    from {
+
+        opacity: 1;
+
+        transform:
+            translateX(0);
+    }
+
+    to {
+
+        opacity: 0;
+
+        transform:
+            translateX(50px);
+    }
+}

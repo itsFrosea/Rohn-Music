@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | Rohn Music</title>
+
+    <link rel="stylesheet" href="../style.css">
+
+</head>
+
+<body>
+
+    <main class="auth-page">
+
+        <div class="auth-container">
+
+            <p class="auth-label">
+                ROHN MUSIC
+            </p>
+
+            <h1>
+                CREATE ACCOUNT
+            </h1>
+
+            <p class="auth-description">
+                Create an account to request bookings
+                and track your events.
+            </p>
+
+
+            <form id="registerForm">
+
+                <div class="form-group">
+
+                    <label for="name">
+                        NAME
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        EMAIL
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        PHONE
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        PASSWORD
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        minlength="8"
+                        required
+                    >
+
+                </div>
+
+
+                <p
+                    id="registerMessage"
+                    class="auth-message"
+                ></p>
+
+
+                <button
+                    type="submit"
+                    class="booking-button"
+                >
+                    CREATE ACCOUNT
+                </button>
+
+            </form>
+
+
+            <p class="auth-switch">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Log in
+                </a>
+
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <script src="auth.js"></script>
+
+</body>
+
+</html>
