@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "booking.html"
     ];
 
+    
+
 
     /* ========================================
        TRANSITION SETTINGS
@@ -59,6 +61,48 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
+    /* ========================================
+    UPDATE ACTIVE NAVIGATION
+    ======================================== */
+
+    function updateActiveNavigation(page) {
+
+        const navigationLinks =
+            document.querySelectorAll(
+                ".navigation a"
+            );
+
+
+        navigationLinks.forEach(link => {
+
+            const href =
+                link.getAttribute("href");
+
+
+            if (!href) {
+                return;
+            }
+
+
+            const linkPage =
+                getPageName(href);
+
+
+            link.classList.toggle(
+                "active",
+                linkPage === page
+            );
+
+        });
+
+}
+
+
+updateActiveNavigation(
+        getPageName(
+            window.location.href
+        )
+    );
 
     /* ========================================
        GET DIRECTION
@@ -389,6 +433,9 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
         }
+        updateActiveNavigation(
+            nextPage
+        );
 
 
         /* ====================================
