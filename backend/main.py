@@ -17,7 +17,19 @@ from database import (
     get_user_by_email,
     get_user_by_id,
     get_user_bookings,
-    verify_password
+    verify_password,
+
+    create_show,
+    get_all_shows,
+    get_approved_shows,
+    get_show_by_id,
+    update_show,
+    delete_show,
+    approve_show,
+    reject_show,
+
+    create_admin,
+    get_admin_by_email
 )
 
 
@@ -93,6 +105,59 @@ async def get_current_user(
             detail="Invalid or expired authentication token."
         )
 
+# ========================================
+# ADMIN AUTHENTICATION
+# ========================================
+
+async def get_current_admin(
+    credentials: HTTPAuthorizationCredentials = Depends(
+        security
+    )
+):
+
+    token = credentials.credentials
+
+    if not JWT_SECRET_KEY:
+
+        raise HTTPException(
+            status_code=500,
+            detail="JWT secret is not configured."
+        )
+
+    try:
+
+        payload = jwt.decode(
+            token,
+            JWT_SECRET_KEY,
+            algorithms=[JWT_ALGORITHM]
+        )
+
+        admin_id = payload.get("admin_id")
+
+        token_type = payload.get(
+            "type"
+        )
+
+        if not admin_id:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid admin token."
+            )
+
+        if token_type != "admin":
+            raise HTTPException(
+                status_code=403,
+                detail="Admin access required."
+            )
+
+        return int(admin_id)
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or expired admin token."
+        )
 
 # ========================================
 # REQUEST MODELS
@@ -115,6 +180,12 @@ class LoginRequest(BaseModel):
 
     password: str
 
+class AdminLoginRequest(BaseModel):
+
+    email: EmailStr
+
+    password: str
+
 
 class BookingRequest(BaseModel):
 
@@ -130,6 +201,25 @@ class BookingRequest(BaseModel):
 
     message: str | None = None
 
+class ShowRequest(BaseModel):
+
+    title: str
+
+    date: str
+
+    start_time: str | None = None
+
+    end_time: str | None = None
+
+    venue: str | None = None
+
+    city: str | None = None
+
+    description: str | None = None
+
+    image_url: str | None = None
+
+    status: str = "upcoming"
 
 # ========================================
 # BASIC
@@ -296,6 +386,74 @@ async def login(data: LoginRequest):
         }
     }
 
+# ========================================
+# ADMIN LOGIN
+# ========================================
+
+@app.post("/api/auth/admin-login")
+async def admin_login(
+    data: AdminLoginRequest
+):
+
+    admin = get_admin_by_email(
+        data.email
+    )
+
+    if not admin:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password."
+        )
+
+    if not verify_password(
+        data.password,
+        admin["password_hash"]
+    ):
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password."
+        )
+
+    if not JWT_SECRET_KEY:
+
+        raise HTTPException(
+            status_code=500,
+            detail="JWT secret is not configured."
+        )
+
+    expires = (
+        datetime.now(timezone.utc)
+        + timedelta(minutes=JWT_EXPIRE_MINUTES)
+    )
+
+    token = jwt.encode(
+        {
+            "admin_id": str(admin["id"]),
+            "email": admin["email"],
+            "type": "admin",
+            "exp": expires
+        },
+        JWT_SECRET_KEY,
+        algorithm=JWT_ALGORITHM
+    )
+
+    return {
+
+        "success": True,
+
+        "access_token": token,
+
+        "token_type": "bearer",
+
+        "admin": {
+            "id": admin["id"],
+            "email": admin["email"]
+        }
+
+    }
+
 
 # ========================================
 # CURRENT USER
@@ -443,13 +601,244 @@ async def get_availability():
 
 
 # ========================================
-# SHOWS
+# PUBLIC SHOWS
 # ========================================
 
 @app.get("/api/shows")
 async def get_shows():
 
-    return {
+    shows = get_approved_shows()
 
-        "shows": []
+    return {
+        "shows": shows
+    }
+
+# ========================================
+# ADMIN - ALL SHOWS
+# ========================================
+
+@app.get("/api/shows/admin")
+async def get_admin_shows(
+    admin_id: int = Depends(
+        get_current_admin
+    )
+):
+
+    shows = get_all_shows()
+
+    return {
+        "shows": shows
+    }
+
+# ========================================
+# ADMIN - CREATE SHOW
+# ========================================
+
+@app.post("/api/shows")
+async def create_new_show(
+    data: ShowRequest,
+
+    admin_id: int = Depends(
+        get_current_admin
+    )
+):
+
+    try:
+
+        show = create_show(
+
+            title=data.title,
+
+            date=data.date,
+
+            start_time=data.start_time,
+
+            end_time=data.end_time,
+
+            venue=data.venue,
+
+            city=data.city,
+
+            description=data.description,
+
+            image_url=data.image_url,
+
+            status=data.status
+        )
+
+        return {
+
+            "success": True,
+
+            "show": show
+        }
+
+    except Exception as e:
+
+        print(
+            "CREATE SHOW ERROR:",
+            e
+        )
+
+        raise HTTPException(
+
+            status_code=500,
+
+            detail="Unable to create show."
+        )
+
+# ========================================
+# ADMIN - UPDATE SHOW
+# ========================================
+
+@app.put("/api/shows/{show_id}")
+async def edit_show(
+    show_id: int,
+
+    data: ShowRequest,
+
+    admin_id: int = Depends(
+        get_current_admin   
+    )
+):
+
+    existing = get_show_by_id(show_id)
+
+    if not existing:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Show not found."
+        )
+
+
+    try:
+
+        show = update_show(
+
+            show_id=show_id,
+
+            title=data.title,
+
+            date=data.date,
+
+            start_time=data.start_time,
+
+            end_time=data.end_time,
+
+            venue=data.venue,
+
+            city=data.city,
+
+            description=data.description,
+
+            image_url=data.image_url,
+
+            status=data.status
+        )
+
+        return {
+
+            "success": True,
+
+            "show": show
+        }
+
+    except Exception as e:
+
+        print(
+            "UPDATE SHOW ERROR:",
+            e
+        )
+
+        raise HTTPException(
+
+            status_code=500,
+
+            detail="Unable to update show."
+        )
+
+# ========================================
+# ADMIN - APPROVE SHOW
+# ========================================
+
+@app.patch("/api/shows/{show_id}/approve")
+async def approve_show_route(
+    show_id: int,
+
+    admin_id: int = Depends(
+        get_current_admin   
+    )
+):
+
+    existing = get_show_by_id(show_id)
+
+    if not existing:
+        raise HTTPException(
+            status_code=404,
+            detail="Show not found."
+        )
+
+    show = approve_show(show_id)
+
+    return {
+        "success": True,
+        "show": show
+    }
+
+# ========================================
+# ADMIN - REJECT SHOW
+# ========================================
+
+@app.patch("/api/shows/{show_id}/reject")
+async def reject_show_route(
+    show_id: int,
+
+    admin_id: int = Depends(
+        get_current_admin   
+    )
+):
+
+    existing = get_show_by_id(show_id)
+
+    if not existing:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Show not found."
+        )
+
+    show = reject_show(show_id)
+
+    return {
+        "success": True,
+        "show": show
+    }
+
+
+# ========================================
+# ADMIN - DELETE SHOW
+# ========================================
+
+@app.delete("/api/shows/{show_id}")
+async def remove_show(
+    show_id: int,
+
+    admin_id: int = Depends(
+        get_current_admin   
+    )
+):
+
+    deleted = delete_show(show_id)
+
+    if not deleted:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Show not found."
+        )
+
+    return {
+        "success": True,
+        "message": "Show deleted."
     }

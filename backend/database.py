@@ -84,6 +84,25 @@ def init_database():
                 )
             """)
 
+            # ========================================
+            # ADMINS
+            # ========================================
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS admins (
+
+                    id BIGSERIAL PRIMARY KEY,
+
+                    email VARCHAR(255) UNIQUE NOT NULL,
+
+                    password_hash TEXT NOT NULL,
+
+                    created_at
+                    TIMESTAMPTZ
+                    DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
 
             # ========================================
             # BOOKINGS
@@ -210,6 +229,45 @@ def init_database():
                         )
                     )
                 )
+            """)
+
+            # ========================================
+            # SHOW APPROVAL STATUS
+            # ========================================
+
+            cursor.execute("""
+                ALTER TABLE shows
+                ADD COLUMN IF NOT EXISTS approval_status
+                VARCHAR(20)
+                NOT NULL
+                DEFAULT 'pending'
+            """)
+
+            cursor.execute("""
+                DO $$
+                BEGIN
+
+                    IF NOT EXISTS (
+                        SELECT 1
+                        FROM pg_constraint
+                        WHERE conname = 'shows_approval_status_check'
+                    ) THEN
+
+                        ALTER TABLE shows
+                        ADD CONSTRAINT shows_approval_status_check
+
+                        CHECK (
+                            approval_status IN (
+                                'pending',
+                                'approved',
+                                'rejected'
+                            )
+                        );
+
+                    END IF;
+
+                END
+                $$;
             """)
 
         connection.commit()
@@ -512,3 +570,439 @@ def get_user_bookings(user_id: int):
             ))
 
             return cursor.fetchall()
+
+# ========================================
+# SHOWS
+# ========================================
+
+def create_show(
+    title: str,
+    date: str,
+    start_time: str | None = None,
+    end_time: str | None = None,
+    venue: str | None = None,
+    city: str | None = None,
+    description: str | None = None,
+    image_url: str | None = None,
+    status: str = "upcoming"
+):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                INSERT INTO shows (
+
+                    title,
+                    date,
+                    start_time,
+                    end_time,
+                    venue,
+                    city,
+                    description,
+                    image_url,
+                    status
+
+                )
+
+                VALUES (
+
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s
+
+                )
+
+                RETURNING
+                    id,
+                    title,
+                    date,
+                    start_time,
+                    end_time,
+                    venue,
+                    city,
+                    description,
+                    image_url,
+                    status,
+                    approval_status,
+                    created_at
+
+            """, (
+                title,
+                date,
+                start_time,
+                end_time,
+                venue,
+                city,
+                description,
+                image_url,
+                status
+            ))
+
+            show = cursor.fetchone()
+
+        connection.commit()
+
+    return show
+
+
+# ========================================
+# GET ALL SHOWS
+# ========================================
+
+def get_all_shows():
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT
+                    id,
+                    title,
+                    date,
+                    start_time,
+                    end_time,
+                    venue,
+                    city,
+                    description,
+                    image_url,
+                    status,
+                    approval_status,
+                    created_at
+
+                FROM shows
+
+                ORDER BY date ASC, start_time ASC
+            """)
+
+            return cursor.fetchall()
+
+
+# ========================================
+# GET APPROVED SHOWS
+# ========================================
+
+def get_approved_shows():
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT
+                    id,
+                    title,
+                    date,
+                    start_time,
+                    end_time,
+                    venue,
+                    city,
+                    description,
+                    image_url,
+                    status,
+                    approval_status,
+                    created_at
+
+                FROM shows
+
+                WHERE approval_status = 'approved'
+
+                ORDER BY date ASC, start_time ASC
+            """)
+
+            return cursor.fetchall()
+
+
+# ========================================
+# GET SHOW BY ID
+# ========================================
+
+def get_show_by_id(show_id: int):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT
+                    id,
+                    title,
+                    date,
+                    start_time,
+                    end_time,
+                    venue,
+                    city,
+                    description,
+                    image_url,
+                    status,
+                    approval_status,
+                    created_at
+
+                FROM shows
+
+                WHERE id = %s
+            """, (
+                show_id,
+            ))
+
+            return cursor.fetchone()
+
+
+# ========================================
+# UPDATE SHOW
+# ========================================
+
+def update_show(
+    show_id: int,
+    title: str,
+    date: str,
+    start_time: str | None = None,
+    end_time: str | None = None,
+    venue: str | None = None,
+    city: str | None = None,
+    description: str | None = None,
+    image_url: str | None = None,
+    status: str = "upcoming"
+):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                UPDATE shows
+
+                SET
+
+                    title = %s,
+                    date = %s,
+                    start_time = %s,
+                    end_time = %s,
+                    venue = %s,
+                    city = %s,
+                    description = %s,
+                    image_url = %s,
+                    status = %s
+
+                WHERE id = %s
+
+                RETURNING
+                    id,
+                    title,
+                    date,
+                    start_time,
+                    end_time,
+                    venue,
+                    city,
+                    description,
+                    image_url,
+                    status,
+                    approval_status,
+                    created_at
+
+            """, (
+                title,
+                date,
+                start_time,
+                end_time,
+                venue,
+                city,
+                description,
+                image_url,
+                status,
+                show_id
+            ))
+
+            show = cursor.fetchone()
+
+        connection.commit()
+
+    return show
+
+
+# ========================================
+# DELETE SHOW
+# ========================================
+
+def delete_show(show_id: int):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                DELETE FROM shows
+
+                WHERE id = %s
+
+                RETURNING id
+            """, (
+                show_id,
+            ))
+
+            deleted = cursor.fetchone()
+
+        connection.commit()
+
+    return deleted
+
+
+# ========================================
+# APPROVE SHOW
+# ========================================
+
+def approve_show(show_id: int):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                UPDATE shows
+
+                SET approval_status = 'approved'
+
+                WHERE id = %s
+
+                RETURNING
+                    id,
+                    title,
+                    date,
+                    start_time,
+                    end_time,
+                    venue,
+                    city,
+                    description,
+                    image_url,
+                    status,
+                    approval_status,
+                    created_at
+
+            """, (
+                show_id,
+            ))
+
+            show = cursor.fetchone()
+
+        connection.commit()
+
+    return show
+
+
+# ========================================
+# REJECT SHOW
+# ========================================
+
+def reject_show(show_id: int):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                UPDATE shows
+
+                SET approval_status = 'rejected'
+
+                WHERE id = %s
+
+                RETURNING
+                    id,
+                    title,
+                    date,
+                    start_time,
+                    end_time,
+                    venue,
+                    city,
+                    description,
+                    image_url,
+                    status,
+                    approval_status,
+                    created_at
+
+            """, (
+                show_id,
+            ))
+
+            show = cursor.fetchone()
+
+        connection.commit()
+
+    return show
+
+
+# ========================================
+# ADMIN AUTHENTICATION
+# ========================================
+
+def create_admin(
+    email: str,
+    password: str
+):
+
+    password_hash = create_password_hash(
+        password
+    )
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                INSERT INTO admins (
+                    email,
+                    password_hash
+                )
+
+                VALUES (
+                    %s,
+                    %s
+                )
+
+                RETURNING
+                    id,
+                    email,
+                    created_at
+            """, (
+                email.lower().strip(),
+                password_hash
+            ))
+
+            admin = cursor.fetchone()
+
+        connection.commit()
+
+    return admin
+
+
+def get_admin_by_email(
+    email: str
+):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT
+                    id,
+                    email,
+                    password_hash,
+                    created_at
+
+                FROM admins
+
+                WHERE email = %s
+            """, (
+                email.lower().strip(),
+            ))
+
+            return cursor.fetchone()

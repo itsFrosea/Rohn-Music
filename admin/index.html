@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin | Rohn Music</title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ========================================
+         ADMIN HEADER
+    ========================================= -->
+
+    <header class="admin-header">
+
+        <div class="admin-brand">
+
+            <span class="admin-brand-name">
+                ROHN MUSIC
+            </span>
+
+            <span class="admin-brand-label">
+                ADMIN
+            </span>
+
+        </div>
+
+
+        <div class="admin-header-right">
+
+            <a
+                href="../index.html"
+                class="view-site"
+            >
+                VIEW SITE
+            </a>
+
+            <button
+                class="logout-button"
+                id="logoutButton"
+            >
+                LOG OUT
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================================
+         ADMIN LAYOUT
+    ========================================= -->
+
+    <div class="admin-layout">
+
+
+        <!-- ====================================
+             SIDEBAR
+        ====================================== -->
+
+        <aside class="admin-sidebar">
+
+            <nav class="admin-navigation">
+
+                <button
+                    class="admin-nav-item active"
+                    data-page="shows"
+                >
+                    <i class="fa-solid fa-calendar"></i>
+                    <span>Shows</span>
+                </button>
+
+
+                <button
+                    class="admin-nav-item"
+                    data-page="bookings"
+                >
+                    <i class="fa-solid fa-inbox"></i>
+                    <span>Bookings</span>
+                </button>
+
+
+                <button
+                    class="admin-nav-item"
+                    data-page="releases"
+                >
+                    <i class="fa-solid fa-music"></i>
+                    <span>Releases</span>
+                </button>
+
+            </nav>
+
+        </aside>
+
+
+
+        <!-- ====================================
+             MAIN CONTENT
+        ====================================== -->
+
+        <main class="admin-main">
+
+
+            <!-- =================================
+                 SHOWS HEADER
+            ================================= -->
+
+            <section class="admin-page-header">
+
+                <div>
+
+                    <p class="admin-label">
+                        MANAGEMENT
+                    </p>
+
+                    <h1>
+                        SHOWS
+                    </h1>
+
+                    <p class="admin-description">
+                        Manage upcoming performances
+                        and control which shows appear
+                        publicly on the website.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="admin-primary-button"
+                    id="addShowButton"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                    ADD SHOW
+                </button>
+
+            </section>
+
+
+
+            <!-- =================================
+                 FILTER
+            ================================= -->
+
+            <section class="show-toolbar">
+
+                <div class="show-filter">
+
+                    <button
+                        class="filter-button active"
+                        data-status="all"
+                    >
+                        ALL
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-status="pending"
+                    >
+                        PENDING
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-status="approved"
+                    >
+                        APPROVED
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-status="hidden"
+                    >
+                        HIDDEN
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================
+                 SHOW LIST
+            ================================= -->
+
+            <section class="show-list">
+
+                <div
+                    id="showList"
+                    class="show-list-inner"
+                >
+
+                    <!--
+                        Shows will be inserted
+                        here by admin.js.
+                    -->
+
+                    <div class="admin-loading">
+
+                        <span>
+                            Loading shows...
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ========================================
+         ADD / EDIT SHOW MODAL
+    ========================================= -->
+
+    <div
+        class="admin-modal"
+        id="showModal"
+    >
+
+        <div class="admin-modal-overlay"></div>
+
+
+        <div class="admin-modal-content">
+
+
+            <div class="admin-modal-header">
+
+                <div>
+
+                    <p class="admin-label">
+                        SHOW MANAGEMENT
+                    </p>
+
+                    <h2 id="modalTitle">
+                        ADD SHOW
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="modal-close"
+                    id="modalClose"
+                    aria-label="Close"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================
+                 SHOW FORM
+            ================================= -->
+
+            <form
+                id="showForm"
+                class="admin-form"
+            >
+
+                <input
+                    type="hidden"
+                    id="showId"
+                >
+
+
+                <div class="admin-form-grid">
+
+
+                    <!-- TITLE -->
+
+                    <div class="admin-form-group full">
+
+                        <label for="showTitle">
+                            SHOW NAME
+                        </label>
+
+                        <input
+                            type="text"
+                            id="showTitle"
+                            name="title"
+                            placeholder="Rohn Music Live"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="admin-form-group">
+
+                        <label for="showDate">
+                            DATE
+                        </label>
+
+                        <input
+                            type="date"
+                            id="showDate"
+                            name="event_date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- TIME -->
+
+                    <div class="admin-form-group">
+
+                        <label for="showTime">
+                            TIME
+                        </label>
+
+                        <input
+                            type="time"
+                            id="showTime"
+                            name="event_time"
+                        >
+
+                    </div>
+
+
+                    <!-- VENUE -->
+
+                    <div class="admin-form-group">
+
+                        <label for="showVenue">
+                            VENUE
+                        </label>
+
+                        <input
+                            type="text"
+                            id="showVenue"
+                            name="venue"
+                            placeholder="Venue name"
+                        >
+
+                    </div>
+
+
+                    <!-- CITY -->
+
+                    <div class="admin-form-group">
+
+                        <label for="showCity">
+                            CITY
+                        </label>
+
+                        <input
+                            type="text"
+                            id="showCity"
+                            name="city"
+                            placeholder="Mumbai"
+                        >
+
+                    </div>
+
+
+                    <!-- TICKET URL -->
+
+                    <div class="admin-form-group full">
+
+                        <label for="ticketUrl">
+                            TICKET URL
+                        </label>
+
+                        <input
+                            type="url"
+                            id="ticketUrl"
+                            name="ticket_url"
+                            placeholder="https://..."
+                        >
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="admin-form-group full">
+
+                        <label for="showDescription">
+                            DESCRIPTION
+                        </label>
+
+                        <textarea
+                            id="showDescription"
+                            name="description"
+                            rows="5"
+                            placeholder="Tell people about the show..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="admin-form-group">
+
+                        <label for="showStatus">
+                            STATUS
+                        </label>
+
+                        <select
+                            id="showStatus"
+                            name="status"
+                        >
+
+                            <option value="pending">
+                                Pending
+                            </option>
+
+                            <option value="approved">
+                                Approved
+                            </option>
+
+                            <option value="hidden">
+                                Hidden
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- IMAGE -->
+
+                    <div class="admin-form-group">
+
+                        <label for="showImage">
+                            IMAGE URL
+                        </label>
+
+                        <input
+                            type="text"
+                            id="showImage"
+                            name="image_url"
+                            placeholder="assets/show.jpg"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FORM ACTIONS -->
+
+                <div class="admin-form-actions">
+
+                    <button
+                        type="button"
+                        class="admin-secondary-button"
+                        id="cancelShow"
+                    >
+                        CANCEL
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="admin-primary-button"
+                    >
+                        SAVE SHOW
+                    </button>
+
+                </div>
+
+
+                <p
+                    id="formMessage"
+                    class="admin-form-message"
+                ></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="admin.js"></script>
+
+</body>
+
+</html>

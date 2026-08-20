@@ -503,6 +503,7 @@ updateActiveNavigation(
         ==================================== */
 
         initializePage();
+        initializeScrollReveal();
 
     }
 
@@ -690,5 +691,92 @@ updateActiveNavigation(
 
     }
 
+    /* ========================================
+    SCROLL REVEAL
+    ======================================== */
+
+    let scrollRevealObserver = null;
+
+    function initializeScrollReveal() {
+
+        /*
+        * Disconnect the previous observer.
+        * This is important because the SPA replaces
+        * #page-container contents during navigation.
+        */
+
+        if (scrollRevealObserver) {
+            scrollRevealObserver.disconnect();
+        }
+
+
+        const elements =
+            document.querySelectorAll(
+                "#page-container .scroll-reveal"
+            );
+
+
+        if (!elements.length) {
+            return;
+        }
+
+
+        /*
+        * Make sure newly loaded sections start hidden.
+        */
+
+        elements.forEach(element => {
+
+            element.classList.remove(
+                "is-visible"
+            );
+
+        });
+
+
+        scrollRevealObserver =
+            new IntersectionObserver(
+                entries => {
+
+                    entries.forEach(entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target.classList.add(
+                                "is-visible"
+                            );
+
+                            scrollRevealObserver.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    });
+
+                },
+                {
+                    threshold: 0.10,
+
+                    rootMargin:
+                        "0px 0px -80px 0px"
+                }
+            );
+
+
+        elements.forEach(element => {
+
+            scrollRevealObserver.observe(
+                element
+            );
+
+        });
+
+    }
+    initializeScrollReveal()
+
 
 });
+
