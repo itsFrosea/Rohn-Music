@@ -571,6 +571,165 @@ def get_user_bookings(user_id: int):
 
             return cursor.fetchall()
 
+def update_booking(
+    booking_id: int,
+    user_id: int,
+    event_type: str,
+    event_date: str,
+    venue: str | None = None,
+    city: str | None = None,
+    guest_count: int | None = None,
+    message: str | None = None
+):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            # Only allow editing the user's own
+            # pending booking.
+
+            cursor.execute("""
+                SELECT status
+                FROM bookings
+                WHERE id = %s
+                AND user_id = %s
+            """, (
+                booking_id,
+                user_id
+            ))
+
+            booking = cursor.fetchone()
+
+            if not booking:
+
+                raise ValueError(
+                    "Booking not found."
+                )
+
+            if booking["status"] != "pending":
+
+                raise ValueError(
+                    "Only pending bookings can be edited."
+                )
+
+
+            # Check whether the new date is already
+            # occupied by an approved booking.
+
+            cursor.execute("""
+                SELECT id
+                FROM bookings
+                WHERE event_date = %s
+                AND status = 'approved'
+                AND id != %s
+                LIMIT 1
+            """, (
+                event_date,
+                booking_id
+            ))
+
+            if cursor.fetchone():
+
+                raise ValueError(
+                    "This date is already booked."
+                )
+
+
+            # Update booking.
+
+            cursor.execute("""
+                UPDATE bookings
+
+                SET
+                    event_type = %s,
+                    event_date = %s,
+                    venue = %s,
+                    city = %s,
+                    guest_count = %s,
+                    message = %s
+
+                WHERE id = %s
+                AND user_id = %s
+                AND status = 'pending'
+
+                RETURNING
+                    id,
+                    event_type,
+                    event_date,
+                    venue,
+                    city,
+                    guest_count,
+                    message,
+                    status,
+                    created_at
+            """, (
+                event_type,
+                event_date,
+                venue,
+                city,
+                guest_count,
+                message,
+                booking_id,
+                user_id
+            ))
+
+            updated = cursor.fetchone()
+
+        connection.commit()
+
+    return updated
+
+# ========================================
+# GET ALL BOOKINGS - ADMIN
+# ========================================
+
+def get_all_bookings():
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT
+
+                    b.id,
+
+                    b.user_id,
+
+                    u.name AS user_name,
+
+                    u.email AS user_email,
+
+                    u.phone AS user_phone,
+
+                    b.event_type,
+
+                    b.event_date,
+
+                    b.venue,
+
+                    b.city,
+
+                    b.guest_count,
+
+                    b.message,
+
+                    b.status,
+
+                    b.created_at
+
+                FROM bookings b
+
+                INNER JOIN users u
+                    ON u.id = b.user_id
+
+                ORDER BY
+                    b.created_at DESC
+            """)
+
+            return cursor.fetchall()
+
 # ========================================
 # SHOWS
 # ========================================

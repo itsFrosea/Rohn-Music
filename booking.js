@@ -16,7 +16,6 @@ async function initializeBooking() {
         localStorage.getItem("access_token");
 
 
-    // User must be logged in
     if (!token) {
 
         window.location.href =
@@ -26,20 +25,20 @@ async function initializeBooking() {
     }
 
 
-    // Verify the login token
     try {
 
-        const response = await fetch(
-            `${BOOKING_API_URL}/api/me`,
-            {
-                method: "GET",
+        const response =
+            await fetch(
+                `${BOOKING_API_URL}/api/me`,
+                {
+                    method: "GET",
 
-                headers: {
-                    "Authorization":
-                        `Bearer ${token}`
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
                 }
-            }
-        );
+            );
 
 
         if (!response.ok) {
@@ -68,9 +67,40 @@ async function initializeBooking() {
         );
 
 
+        /*
+         * Check whether this page was opened
+         * from EDIT BOOKING.
+         *
+         * Example:
+         *
+         * booking.html?edit=5
+         */
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const bookingId =
+            params.get("edit");
+
+
+        if (bookingId) {
+
+            await initializeEditBooking(
+                bookingId,
+                token
+            );
+
+        }
+
+
         setupBookingForm();
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "AUTH ERROR:",
@@ -81,7 +111,264 @@ async function initializeBooking() {
             "Unable to connect to the server.",
             true
         );
+
     }
+
+}
+
+
+// ========================================
+// EDIT BOOKING INITIALIZATION
+// ========================================
+
+async function initializeEditBooking(
+    bookingId,
+    token
+) {
+
+    try {
+
+        /*
+         * Get the user's bookings.
+         *
+         * We already have this endpoint:
+         *
+         * GET /api/bookings
+         */
+
+        const response =
+            await fetch(
+                `${BOOKING_API_URL}/api/bookings`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.detail ||
+                "Unable to load booking."
+            );
+
+        }
+
+
+        const bookings =
+            result.bookings || [];
+
+
+        const booking =
+            bookings.find(
+                item =>
+                    String(item.id) ===
+                    String(bookingId)
+            );
+
+
+        if (!booking) {
+
+            showBookingMessage(
+                "Booking not found.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Only pending bookings
+         * can be edited.
+         */
+
+        if (
+            String(
+                booking.status
+            ).toLowerCase() !==
+            "pending"
+        ) {
+
+            showBookingMessage(
+                "Only pending bookings can be edited.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "EDITING BOOKING:",
+            booking
+        );
+
+
+        /*
+         * Store booking ID so submitBooking()
+         * knows this is an edit.
+         */
+
+        window.editingBookingId =
+            booking.id;
+
+
+        /*
+         * Fill the form.
+         */
+
+        const eventType =
+            document.getElementById(
+                "event-type"
+            );
+
+        const eventDate =
+            document.getElementById(
+                "event-date"
+            );
+
+        const venue =
+            document.getElementById(
+                "venue"
+            );
+
+        const city =
+            document.getElementById(
+                "city"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        if (eventType) {
+
+            eventType.value =
+                booking.event_type || "";
+
+        }
+
+
+        if (eventDate) {
+
+            eventDate.value =
+                booking.event_date || "";
+
+        }
+
+
+        if (venue) {
+
+            venue.value =
+                booking.venue || "";
+
+        }
+
+
+        if (city) {
+
+            city.value =
+                booking.city || "";
+
+        }
+
+
+        if (message) {
+
+            message.value =
+                booking.message || "";
+
+        }
+
+
+        /*
+         * Change page/button text.
+         */
+
+        const submitButton =
+            document.getElementById(
+                "bookingSubmit"
+            );
+
+
+        if (submitButton) {
+
+            submitButton.textContent =
+                "SAVE CHANGES";
+
+        }
+
+
+        /*
+         * Change the heading if desired.
+         */
+
+        const bookingTitle =
+            document.querySelector(
+                ".booking-title"
+            );
+
+
+        if (bookingTitle) {
+
+            bookingTitle.innerHTML = `
+                <span class="reveal-item">
+                    EDIT YOUR BOOKING
+                </span>
+
+                <span class="reveal-item">
+                    REQUEST.
+                </span>
+            `;
+
+        }
+
+
+        const bookingDescription =
+            document.querySelector(
+                ".booking-description"
+            );
+
+
+        if (bookingDescription) {
+
+            bookingDescription.textContent =
+                "Update your booking details before the request is approved.";
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "EDIT BOOKING LOAD ERROR:",
+            error
+        );
+
+
+        showBookingMessage(
+            error.message ||
+            "Unable to load booking.",
+            true
+        );
+
+    }
+
 }
 
 
@@ -104,18 +391,30 @@ function setupBookingForm() {
         );
 
         return;
+
     }
+
+
+    /*
+     * Prevent duplicate event listeners.
+     */
+
+    form.removeEventListener(
+        "submit",
+        submitBooking
+    );
 
 
     form.addEventListener(
         "submit",
         submitBooking
     );
+
 }
 
 
 // ========================================
-// SUBMIT BOOKING
+// SUBMIT / UPDATE BOOKING
 // ========================================
 
 async function submitBooking(event) {
@@ -135,11 +434,12 @@ async function submitBooking(event) {
             "login/login.html";
 
         return;
+
     }
 
 
     // ========================================
-    // GET FORM VALUES
+    // FORM VALUES
     // ========================================
 
     const eventType =
@@ -190,8 +490,12 @@ async function submitBooking(event) {
         city:
             city || null,
 
+        guest_count:
+            null,
+
         message:
             message || null
+
     };
 
 
@@ -213,45 +517,104 @@ async function submitBooking(event) {
 
     if (submitButton) {
 
-        submitButton.disabled = true;
+        submitButton.disabled =
+            true;
 
         submitButton.textContent =
-            "SENDING...";
+            window.editingBookingId
+                ? "SAVING..."
+                : "SENDING...";
+
     }
 
 
     showBookingMessage(
-        "Sending booking request...",
+        window.editingBookingId
+            ? "Saving your changes..."
+            : "Sending booking request...",
         false
     );
 
 
     // ========================================
-    // SEND TO FASTAPI
+    // CREATE OR UPDATE
     // ========================================
 
     try {
 
-        const response = await fetch(
-            `${BOOKING_API_URL}/api/bookings`,
-            {
-                method: "POST",
+        let response;
 
-                headers: {
 
-                    "Content-Type":
-                        "application/json",
+        /*
+         * ======================================
+         * EDIT EXISTING BOOKING
+         * ======================================
+         */
 
-                    "Authorization":
-                        `Bearer ${token}`
-                },
+        if (
+            window.editingBookingId
+        ) {
 
-                body:
-                    JSON.stringify(
-                        bookingData
-                    )
-            }
-        );
+            response =
+                await fetch(
+                    `${BOOKING_API_URL}/api/bookings/${window.editingBookingId}`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                bookingData
+                            )
+
+                    }
+                );
+
+        }
+
+
+        /*
+         * ======================================
+         * CREATE NEW BOOKING
+         * ======================================
+         */
+
+        else {
+
+            response =
+                await fetch(
+                    `${BOOKING_API_URL}/api/bookings`,
+                    {
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                bookingData
+                            )
+
+                    }
+                );
+
+        }
 
 
         const result =
@@ -269,7 +632,10 @@ async function submitBooking(event) {
         // AUTH ERROR
         // ========================================
 
-        if (response.status === 401) {
+        if (
+            response.status ===
+            401
+        ) {
 
             localStorage.removeItem(
                 "access_token"
@@ -283,6 +649,7 @@ async function submitBooking(event) {
                 "login/login.html";
 
             return;
+
         }
 
 
@@ -294,11 +661,12 @@ async function submitBooking(event) {
 
             showBookingMessage(
                 result.detail ||
-                "Unable to submit booking.",
+                "Unable to save booking.",
                 true
             );
 
             return;
+
         }
 
 
@@ -306,18 +674,86 @@ async function submitBooking(event) {
         // SUCCESS
         // ========================================
 
-        showBookingMessage(
-            "Booking request sent successfully!",
-            false
-        );
+        if (
+            window.editingBookingId
+        ) {
 
+            showBookingMessage(
+                "Booking updated successfully!",
+                false
+            );
+
+        }
+
+        else {
+
+            showBookingMessage(
+                "Booking request sent successfully!",
+                false
+            );
+
+        }
+
+
+        /*
+         * Reset form after successful
+         * operation.
+         */
 
         document
-            .getElementById("bookingForm")
+            .getElementById(
+                "bookingForm"
+            )
             .reset();
 
 
-    } catch (error) {
+        /*
+         * Clear edit mode.
+         */
+
+        window.editingBookingId =
+            null;
+
+
+        /*
+         * Restore button.
+         */
+
+        if (submitButton) {
+
+            submitButton.textContent =
+                "SEND BOOKING REQUEST";
+
+        }
+
+
+        /*
+         * If this was an edit, return
+         * the user to My Bookings after
+         * a short delay.
+         */
+
+        if (
+            new URLSearchParams(
+                window.location.search
+            ).get("edit")
+        ) {
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "my-bookings.html";
+
+                },
+                1000
+            );
+
+        }
+
+    }
+
+    catch (error) {
 
         console.error(
             "BOOKING ERROR:",
@@ -330,17 +766,33 @@ async function submitBooking(event) {
             true
         );
 
+    }
 
-    } finally {
+    finally {
 
         if (submitButton) {
 
-            submitButton.disabled = false;
+            submitButton.disabled =
+                false;
 
-            submitButton.textContent =
-                "SEND BOOKING REQUEST";
+            /*
+             * Don't overwrite SAVE CHANGES
+             * while still editing.
+             */
+
+            if (
+                !window.editingBookingId
+            ) {
+
+                submitButton.textContent =
+                    "SEND BOOKING REQUEST";
+
+            }
+
         }
+
     }
+
 }
 
 
@@ -364,7 +816,8 @@ function showBookingMessage(
     }
 
 
-    message.textContent = text;
+    message.textContent =
+        text;
 
 
     if (isError) {
@@ -373,10 +826,14 @@ function showBookingMessage(
             "booking-message-error"
         );
 
-    } else {
+    }
+
+    else {
 
         message.classList.remove(
             "booking-message-error"
         );
+
     }
+
 }

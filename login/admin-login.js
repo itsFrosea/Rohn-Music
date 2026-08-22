@@ -46,7 +46,7 @@ document.addEventListener(
 
                     const response =
                         await fetch(
-                            "http://127.0.0.1:8000/api/admin/login",
+                            "http://127.0.0.1:8000/api/auth/admin-login",
                             {
 
                                 method: "POST",

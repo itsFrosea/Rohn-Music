@@ -3336,3 +3336,572 @@ body {
     transition-delay: 400ms;
 
 }
+
+/* ========================================
+   SHOWS PAGE
+======================================== */
+
+.shows-hero {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: calc(100vh - 70px);
+
+    display: flex;
+
+    align-items: center;
+
+    background: #000;
+
+}
+
+
+.shows-hero-content {
+
+    width: 100%;
+
+    padding:
+        100px
+        8%
+        120px;
+
+}
+
+
+.shows-label {
+
+    margin-bottom: 22px;
+
+    color: #777;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 4px;
+
+}
+
+
+.shows-title {
+
+    display: flex;
+
+    flex-direction: column;
+
+    margin: 0;
+
+    color: #fff;
+
+    font-size:
+        clamp(
+            55px,
+            8vw,
+            110px
+        );
+
+    font-weight: 600;
+
+    line-height: 0.88;
+
+    letter-spacing: -4px;
+
+}
+
+
+.shows-title .reveal-item {
+
+    display: block;
+
+}
+
+
+.shows-description {
+
+    max-width: 430px;
+
+    margin-top: 35px;
+
+    color: #888;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+
+}
+
+
+/* ========================================
+   SHOWS SECTION
+======================================== */
+
+.shows-section {
+
+    width: 100%;
+
+    padding:
+        120px
+        8%
+        150px;
+
+    background: #000;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+}
+
+
+.shows-section-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 50px;
+
+    margin-bottom: 60px;
+
+}
+
+
+.shows-section-label {
+
+    color: #666;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 3px;
+
+}
+
+
+.shows-section-description {
+
+    max-width: 350px;
+
+    color: #777;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+}
+
+
+/* ========================================
+   SHOW LIST
+======================================== */
+
+.shows-list {
+
+    width: 100%;
+
+    max-width: 1200px;
+
+}
+
+
+.shows-loading,
+.shows-empty {
+
+    padding:
+        50px
+        0;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+    color: #666;
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+/* ========================================
+   SHOW CARD
+======================================== */
+
+.public-show {
+
+    display: grid;
+
+    grid-template-columns:
+        110px
+        1fr
+        auto;
+
+    align-items: center;
+
+    gap: 45px;
+
+    padding:
+        35px
+        0;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+}
+
+
+.public-show-date {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+
+.public-show-day {
+
+    color: #fff;
+
+    font-size: 38px;
+
+    font-weight: 500;
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+
+}
+
+
+.public-show-month {
+
+    color: #666;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+}
+
+
+.public-show-info {
+
+    min-width: 0;
+
+}
+
+
+.public-show-title {
+
+    color: #fff;
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    letter-spacing: -0.7px;
+
+}
+
+
+.public-show-location {
+
+    margin-top: 9px;
+
+    color: #666;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.public-show-time {
+
+    margin-top: 8px;
+
+    color: #888;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.public-show-action {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 100px;
+
+    height: 40px;
+
+    padding: 0 15px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.2);
+
+    color: #aaa;
+
+    text-decoration: none;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    transition:
+        color 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+
+}
+
+
+.public-show-action:hover {
+
+    color: #000;
+
+    background: #fff;
+
+    border-color: #fff;
+
+}
+
+
+/* ========================================
+   SHOW CTA
+======================================== */
+
+.shows-cta {
+
+    width: 100%;
+
+    padding:
+        150px
+        8%
+        170px;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    text-align: center;
+
+    background: #000;
+
+}
+
+
+.shows-cta .shows-label {
+
+    margin-bottom: 25px;
+
+}
+
+
+.shows-cta h2 {
+
+    max-width: 900px;
+
+    margin:
+        0
+        auto
+        45px;
+
+    color: #fff;
+
+    font-size:
+        clamp(
+            48px,
+            7vw,
+            96px
+        );
+
+    font-weight: 600;
+
+    line-height: 0.9;
+
+    letter-spacing: -3px;
+
+}
+
+
+.shows-cta h2 span {
+
+    display: block;
+
+}
+
+
+/* ========================================
+   SHOWS REVEAL TIMING
+======================================== */
+
+.shows-title .reveal-item:nth-child(1) {
+
+    animation-delay: 180ms;
+
+}
+
+
+.shows-title .reveal-item:nth-child(2) {
+
+    animation-delay: 280ms;
+
+}
+
+
+.shows-description.reveal-item {
+
+    animation-delay: 400ms;
+
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 700px) {
+
+    .shows-hero {
+
+        min-height:
+            calc(100vh - 60px);
+
+        align-items: flex-end;
+
+    }
+
+
+    .shows-hero-content {
+
+        padding:
+            70px
+            25px
+            70px;
+
+    }
+
+
+    .shows-title {
+
+        font-size: 58px;
+
+        letter-spacing: -2px;
+
+    }
+
+
+    .shows-description {
+
+        max-width: 310px;
+
+        font-size: 13px;
+
+    }
+
+
+    .shows-section {
+
+        padding:
+            85px
+            25px
+            100px;
+
+    }
+
+
+    .shows-section-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 25px;
+
+        margin-bottom: 45px;
+
+    }
+
+
+    .public-show {
+
+        grid-template-columns:
+            70px
+            1fr;
+
+        gap: 25px;
+
+        padding:
+            30px
+            0;
+
+    }
+
+
+    .public-show-day {
+
+        font-size: 30px;
+
+    }
+
+
+    .public-show-title {
+
+        font-size: 21px;
+
+    }
+
+
+    .public-show-action {
+
+        grid-column: 2;
+
+        justify-self: start;
+
+    }
+
+
+    .shows-cta {
+
+        padding:
+            100px
+            25px
+            120px;
+
+    }
+
+
+    .shows-cta h2 {
+
+        font-size: 52px;
+
+        letter-spacing: -1.5px;
+
+    }
+
+}

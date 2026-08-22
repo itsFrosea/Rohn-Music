@@ -292,6 +292,23 @@ function createBookingCard(booking) {
                     `
                     : ""
             }
+            ${
+            status === "pending"
+                ? `
+                    <div class="booking-card-actions">
+
+                        <button
+                            type="button"
+                            class="booking-edit-button"
+                            data-booking-id="${booking.id}"
+                        >
+                            EDIT BOOKING
+                        </button>
+
+                    </div>
+                `
+                : ""
+        }
 
         </article>
     `;
@@ -345,3 +362,39 @@ function escapeHtml(value) {
 
     return div.innerHTML;
 }
+
+// ========================================
+// EDIT BOOKING
+// ========================================
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const button =
+            event.target.closest(
+                ".booking-edit-button"
+            );
+
+        if (!button) {
+            return;
+        }
+
+        const bookingId =
+            button.dataset.bookingId;
+
+        if (!bookingId) {
+            return;
+        }
+
+        // Store the booking ID temporarily
+        localStorage.setItem(
+            "editing_booking_id",
+            bookingId
+        );
+
+        // Open booking form
+        window.location.href =
+            "booking.html";
+    }
+);

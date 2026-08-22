@@ -17,10 +17,13 @@ from database import (
     get_user_by_email,
     get_user_by_id,
     get_user_bookings,
+    update_booking,
+    get_all_bookings,
     verify_password,
 
     create_show,
     get_all_shows,
+    get_connection,
     get_approved_shows,
     get_show_by_id,
     update_show,
@@ -320,7 +323,15 @@ async def register(data: RegisterRequest):
             detail="Unable to create account."
         )
 
+@app.get("/api/debug/shows")
+async def debug_shows():
 
+    shows = get_all_shows()
+
+    return {
+        "count": len(shows),
+        "shows": shows
+    }
 # ========================================
 # LOGIN
 # ========================================
@@ -567,6 +578,74 @@ async def my_bookings(
 
 
 # ========================================
+# UPDATE MY BOOKING
+# ========================================
+
+@app.put("/api/my-bookings/{booking_id}")
+async def edit_my_booking(
+    booking_id: int,
+    data: BookingRequest,
+    user_id: int = Depends(
+        get_current_user
+    )
+):
+
+    try:
+
+        booking = update_booking(
+
+            booking_id=booking_id,
+
+            user_id=user_id,
+
+            event_type=data.event_type,
+
+            event_date=data.event_date,
+
+            venue=data.venue,
+
+            city=data.city,
+
+            guest_count=data.guest_count,
+
+            message=data.message
+
+        )
+
+        if not booking:
+
+            raise HTTPException(
+                status_code=404,
+                detail="Booking not found."
+            )
+
+        return {
+            "success": True,
+            "message": "Booking updated successfully.",
+            "booking": booking
+        }
+
+    except ValueError as e:
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+
+    except Exception as e:
+
+        print(
+            "UPDATE BOOKING ERROR:",
+            e
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to update booking."
+        )
+
+
+# ========================================
 # BOOKINGS
 # ========================================
 
@@ -586,7 +665,131 @@ async def get_bookings(
         "bookings": bookings
     }
 
+# ========================================
+# ADMIN - ALL BOOKINGS
+# ========================================
 
+@app.get("/api/bookings/admin")
+async def get_admin_bookings(
+    admin_id: int = Depends(
+        get_current_admin
+    )
+):
+
+    bookings = get_all_bookings()
+
+    return {
+        "bookings": bookings
+    }
+
+# ========================================
+# ADMIN - APPROVE BOOKING
+# ========================================
+
+@app.patch("/api/bookings/{booking_id}/approve")
+async def approve_booking_route(
+    booking_id: int,
+    admin_id: int = Depends(get_current_admin)
+):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                UPDATE bookings
+
+                SET status = 'approved'
+
+                WHERE id = %s
+
+                RETURNING
+                    id,
+                    user_id,
+                    event_type,
+                    event_date,
+                    venue,
+                    city,
+                    guest_count,
+                    message,
+                    status,
+                    created_at
+            """, (
+                booking_id,
+            ))
+
+            booking = cursor.fetchone()
+
+        connection.commit()
+
+
+    if not booking:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Booking not found."
+        )
+
+
+    return {
+        "success": True,
+        "booking": booking
+    }
+
+
+# ========================================
+# ADMIN - DECLINE BOOKING
+# ========================================
+
+@app.patch("/api/bookings/{booking_id}/decline")
+async def decline_booking_route(
+    booking_id: int,
+    admin_id: int = Depends(get_current_admin)
+):
+
+    with get_connection() as connection:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                UPDATE bookings
+
+                SET status = 'declined'
+
+                WHERE id = %s
+
+                RETURNING
+                    id,
+                    user_id,
+                    event_type,
+                    event_date,
+                    venue,
+                    city,
+                    guest_count,
+                    message,
+                    status,
+                    created_at
+            """, (
+                booking_id,
+            ))
+
+            booking = cursor.fetchone()
+
+        connection.commit()
+
+
+    if not booking:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Booking not found."
+        )
+
+
+    return {
+        "success": True,
+        "booking": booking
+    }
 # ========================================
 # AVAILABILITY
 # ========================================

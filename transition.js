@@ -396,6 +396,18 @@ updateActiveNavigation(
         container.innerHTML =
             newPage.html;
 
+        
+        /* ========================================
+        RESET SCROLL POSITION
+        Every SPA page starts from the top
+        ======================================== */
+
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "instant"
+        });
+
 
         /*
          * Keep the persistent container ID.
@@ -686,6 +698,15 @@ updateActiveNavigation(
         ) {
 
             window.initializeAccount();
+
+        }
+
+        if (
+            typeof window.initializeShows ===
+            "function"
+        ) {
+
+            window.initializeShows();
 
         }
 

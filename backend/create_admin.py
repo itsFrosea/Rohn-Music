@@ -5,8 +5,8 @@ from database import create_admin
 # CREATE ADMIN
 # ========================================
 
-email = "admin@example.com"
-password = "YourPassword123"
+email = "frostyyuniverse@gmail.com"
+password = "2sHVgLKrp2"
 
 
 try:

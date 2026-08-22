@@ -57,6 +57,7 @@
             </a>
 
             <button
+                type="button"
                 class="logout-button"
                 id="logoutButton"
             >
@@ -85,29 +86,44 @@
             <nav class="admin-navigation">
 
                 <button
+                    type="button"
                     class="admin-nav-item active"
                     data-page="shows"
                 >
                     <i class="fa-solid fa-calendar"></i>
-                    <span>Shows</span>
+
+                    <span>
+                        Shows
+                    </span>
+
                 </button>
 
 
                 <button
+                    type="button"
                     class="admin-nav-item"
                     data-page="bookings"
                 >
                     <i class="fa-solid fa-inbox"></i>
-                    <span>Bookings</span>
+
+                    <span>
+                        Bookings
+                    </span>
+
                 </button>
 
 
                 <button
+                    type="button"
                     class="admin-nav-item"
                     data-page="releases"
                 >
                     <i class="fa-solid fa-music"></i>
-                    <span>Releases</span>
+
+                    <span>
+                        Releases
+                    </span>
+
                 </button>
 
             </nav>
@@ -149,11 +165,15 @@
 
 
                 <button
+                    type="button"
                     class="admin-primary-button"
                     id="addShowButton"
                 >
+
                     <i class="fa-solid fa-plus"></i>
+
                     ADD SHOW
+
                 </button>
 
             </section>
@@ -168,32 +188,48 @@
 
                 <div class="show-filter">
 
+
+                    <!-- ALL -->
+
                     <button
+                        type="button"
                         class="filter-button active"
                         data-status="all"
                     >
                         ALL
                     </button>
 
+
+                    <!-- PENDING APPROVAL -->
+
                     <button
+                        type="button"
                         class="filter-button"
                         data-status="pending"
                     >
                         PENDING
                     </button>
 
+
+                    <!-- APPROVED -->
+
                     <button
+                        type="button"
                         class="filter-button"
                         data-status="approved"
                     >
                         APPROVED
                     </button>
 
+
+                    <!-- REJECTED -->
+
                     <button
+                        type="button"
                         class="filter-button"
-                        data-status="hidden"
+                        data-status="rejected"
                     >
-                        HIDDEN
+                        REJECTED
                     </button>
 
                 </div>
@@ -212,11 +248,6 @@
                     id="showList"
                     class="show-list-inner"
                 >
-
-                    <!--
-                        Shows will be inserted
-                        here by admin.js.
-                    -->
 
                     <div class="admin-loading">
 
@@ -246,11 +277,19 @@
         id="showModal"
     >
 
+        <!-- MODAL OVERLAY -->
+
         <div class="admin-modal-overlay"></div>
 
 
+        <!-- MODAL CONTENT -->
+
         <div class="admin-modal-content">
 
+
+            <!-- =================================
+                 MODAL HEADER
+            ================================= -->
 
             <div class="admin-modal-header">
 
@@ -268,11 +307,14 @@
 
 
                 <button
+                    type="button"
                     class="modal-close"
                     id="modalClose"
                     aria-label="Close"
                 >
+
                     <i class="fa-solid fa-xmark"></i>
+
                 </button>
 
             </div>
@@ -288,6 +330,8 @@
                 class="admin-form"
             >
 
+                <!-- Hidden ID -->
+
                 <input
                     type="hidden"
                     id="showId"
@@ -297,7 +341,9 @@
                 <div class="admin-form-grid">
 
 
-                    <!-- TITLE -->
+                    <!-- =================================
+                         TITLE
+                    ================================= -->
 
                     <div class="admin-form-group full">
 
@@ -316,7 +362,10 @@
                     </div>
 
 
-                    <!-- DATE -->
+
+                    <!-- =================================
+                         DATE
+                    ================================= -->
 
                     <div class="admin-form-group">
 
@@ -327,31 +376,37 @@
                         <input
                             type="date"
                             id="showDate"
-                            name="event_date"
+                            name="date"
                             required
                         >
 
                     </div>
 
 
-                    <!-- TIME -->
+
+                    <!-- =================================
+                         START TIME
+                    ================================= -->
 
                     <div class="admin-form-group">
 
                         <label for="showTime">
-                            TIME
+                            START TIME
                         </label>
 
                         <input
                             type="time"
                             id="showTime"
-                            name="event_time"
+                            name="start_time"
                         >
 
                     </div>
 
 
-                    <!-- VENUE -->
+
+                    <!-- =================================
+                         VENUE
+                    ================================= -->
 
                     <div class="admin-form-group">
 
@@ -369,7 +424,10 @@
                     </div>
 
 
-                    <!-- CITY -->
+
+                    <!-- =================================
+                         CITY
+                    ================================= -->
 
                     <div class="admin-form-group">
 
@@ -387,25 +445,10 @@
                     </div>
 
 
-                    <!-- TICKET URL -->
 
-                    <div class="admin-form-group full">
-
-                        <label for="ticketUrl">
-                            TICKET URL
-                        </label>
-
-                        <input
-                            type="url"
-                            id="ticketUrl"
-                            name="ticket_url"
-                            placeholder="https://..."
-                        >
-
-                    </div>
-
-
-                    <!-- DESCRIPTION -->
+                    <!-- =================================
+                         DESCRIPTION
+                    ================================= -->
 
                     <div class="admin-form-group full">
 
@@ -423,12 +466,15 @@
                     </div>
 
 
-                    <!-- STATUS -->
+
+                    <!-- =================================
+                         SHOW STATUS
+                    ================================= -->
 
                     <div class="admin-form-group">
 
                         <label for="showStatus">
-                            STATUS
+                            SHOW STATUS
                         </label>
 
                         <select
@@ -436,16 +482,20 @@
                             name="status"
                         >
 
-                            <option value="pending">
-                                Pending
+                            <option value="upcoming">
+                                Upcoming
                             </option>
 
-                            <option value="approved">
-                                Approved
+                            <option value="live">
+                                Live
                             </option>
 
-                            <option value="hidden">
-                                Hidden
+                            <option value="completed">
+                                Completed
+                            </option>
+
+                            <option value="cancelled">
+                                Cancelled
                             </option>
 
                         </select>
@@ -453,7 +503,10 @@
                     </div>
 
 
-                    <!-- IMAGE -->
+
+                    <!-- =================================
+                         IMAGE URL
+                    ================================= -->
 
                     <div class="admin-form-group">
 
@@ -474,9 +527,12 @@
 
 
 
-                <!-- FORM ACTIONS -->
+                <!-- =================================
+                     FORM ACTIONS
+                ================================= -->
 
                 <div class="admin-form-actions">
+
 
                     <button
                         type="button"
@@ -491,11 +547,20 @@
                         type="submit"
                         class="admin-primary-button"
                     >
+
+                        <i class="fa-solid fa-check"></i>
+
                         SAVE SHOW
+
                     </button>
 
                 </div>
 
+
+
+                <!-- =================================
+                     FORM MESSAGE
+                ================================= -->
 
                 <p
                     id="formMessage"
@@ -509,6 +574,10 @@
     </div>
 
 
+
+    <!-- ========================================
+         JAVASCRIPT
+    ========================================= -->
 
     <script src="admin.js"></script>
 
